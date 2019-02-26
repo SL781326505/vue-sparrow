@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import NProgress from 'nprogress' // 页面加载进度条
+import 'nprogress/nprogress.css'
 
 Vue.use(Router)
 
@@ -59,6 +61,18 @@ export const asyncRoutes = [
   }
 ]
 
-export default new Router({
+const router = new Router({
   routes: asyncRoutes
 })
+
+// 导航首位，可在此做路由权限过滤
+router.beforeEach((to, form, next) => {
+  NProgress.start()
+  next()
+})
+
+router.afterEach(() => {
+  NProgress.done()
+})
+
+export default router

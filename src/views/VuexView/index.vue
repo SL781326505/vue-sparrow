@@ -1,55 +1,55 @@
 <template>
   <div class="container">
-    <pre v-highlight>
-      <code>
-        $("#imgtest").click(function(e){
-            //获取鼠标在图片上的坐标
-            alert("X："+e.offsetX+"\n Y:"+e.offsetY);
-            //获取元素相对于页面的坐标
-            alert("X："+$(this).offset().left+"\n Y:"+$(this).offset().top)
-        });
-      </code>
-    </pre>
-    <pre v-highlight>
-      <code>
-        {{sourceJson}}
-      </code>
-    </pre>
-    <pre v-highlight>
-      <code>
-        {{formatJson}}
-      </code>
-    </pre>
+    <h2 v-if="isAuth">用户名: {{user}}</h2>
+    <h2 v-else>未登录 <span class="login" @click="handleLogin">去登录</span></h2>
+    <p>count: {{count}}</p>
+    <p>double: {{double}}</p>
+    <el-button @click="handleClick">click</el-button>
   </div>
 </template>
 
 <script>
+import { mapState, mapGetters } from 'vuex'
+
 export default {
   data () {
     return {
-      // sourceJson: `{
-      //   "name": "cli3-project",
-      //   "version": "0.1.0",
-      //   "private": true,
-      //   "scripts": {
-      //     "serve": "vue-cli-service serve",
-      //     "build": "vue-cli-service build",
-      //     "lint": "vue-cli-service lint"
-      //   },
-      //   "dependencies": {
-      //     "element-ui": "^2.4.5",
-      //     "highlight.js": "^9.14.2",
-      //     "vue": "^2.5.22",
-      //     "vue-router": "^3.0.2"
-      //   }
-      // }`
-      sourceJson: `{"name": "cli3-project","version": "0.1.0","private": true,"scripts": {"serve": "vue-cli-service serve","build": "vue-cli-service build","lint": "vue-cli-service lint"},"dependencies": {"element-ui": "^2.4.5","highlight.js": "^9.14.2","vue": "^2.5.22","vue-router": "^3.0.2"}}`
     }
   },
   computed: {
-    formatJson () {
-      return JSON.parse(decodeURI(this.sourceJson))
+    // count () {
+    //   return this.$store.state.count
+    // }
+    ...mapState([
+      'count',
+      'user'
+    ]),
+    ...mapGetters([
+      'double',
+      'isAuth'
+    ])
+  },
+  methods: {
+    handleClick () {
+      this.$store.commit('increment')
+    },
+    handleLogin () {
+      this.$router.push('/login')
     }
   }
 }
 </script>
+
+<style lang="less" scoped>
+.container {
+  .login {
+    font-size: 16px;
+    font-weight: normal;
+    color: blue;
+    &:hover {
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  }
+}
+</style>
